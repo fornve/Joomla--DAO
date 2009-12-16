@@ -1,13 +1,23 @@
 <?php
-
+ 
 /*
- * This script loads created entities into JLoader::autoload
+* This script loads created entities into JLoader::autoload
+* Part of Joomla Dao library http://github.com/fornve/Joomla--DAO/
 */
-
+ 
 defined('_JEXEC') or die('Restricted access');
-
+ 
 // DAO base class (what is DAO? http://en.wikipedia.org/wiki/Data_access_object)
-JLoader::register( 'Entity', JPATH_BASE .'/libraries/dao/entity.class.php' );
+JLoader::register( 'Entity', JPATH_BASE .'/libraries/entity.class.php' );
+ 
+$dir = scandir( JPATH_BASE .'/libraries/entities/' );
 
-JLoader::register( 'Category', JPATH_BASE .'/libraries/dao/entities/category.class.php' );
-JLoader::register( 'Item', JPATH_BASE .'/libraries/dao/entities/item.class.php' );
+if( $dir ) foreach( $dir as $file )
+{
+	$filename = basename( $file );
+	$fileparts = explode( '.', $file );
+	if( $fileparts[ 1 ] == 'class' && $fileparts[ 2 ] == 'php' )
+	{
+		JLoader::register( ucfirst( $fileparts[ 0 ] ), JPATH_BASE .'/entities/'. $file );
+	}
+}

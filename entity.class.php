@@ -1,11 +1,10 @@
 <?php
 
 /**
- * @package framework
- * @subpackage entity
+ * @package Joomla DAO
  * @author Marek Dajnowski (first release 20080614)
  * @documentation http://dajnowski.net/wiki/index.php5/Entity
- * @latest http://github.com/fornve/LiteEntityLib/tree/master/class/Entity.class.php
+ * @latest http://github.com/fornve/Joomla--DAO/blob/master/entity.class.php
  * @version 1.3 - Joomla adapter
  * @License GPL v3
  */
@@ -479,27 +478,19 @@ class Entity
 		return $result;
 	}
 
-	/**
-	 * Email error detais to administrator
-	 * @param mixed $arguments 
-	 */
-	private function Error( $db, $arguments )
+	function getParam( $name = null )
 	{
-		if( defined( PRODUCTION ) && defined( ADMIN_EMAIL ) )
-		{
-			$break = "=================================================================";
-			$headers = "From: Entity crash bum bum at {". PROJECT_NAME ."}! <www@". PROJECT_NAME .">";
-			$message = "Entity object: \n\n". var_export( $this, true ) ."\n\n{$break}\n\nArguments:\n\n".  var_export( $this, true ) ."\n\n{$break}\n\Database error:\n\n". var_export( $db, true ) ."\n\n{$break}\n\nServer:\n\n". var_export( $_SERVER, true ) ."\n\n{$break}\n\nPOST:\n\n". var_export( $_POST, true ) ."\n\n{$break}\n\nSession:\n\n". var_export( $_SESSION, true );
-
-			mail( ADMIN_EMAIL, 'Database entity Collection error', $message, $headers );
+		if( !$this->params || !$name )
+			return null;
 		
-			header( "Location: /Error/Database" );
-			exit;
-		}
-		else
-		{
-			var_dump( $this->error, $this->query );
-		}
+		$params = explode( "\n", $this->params );
 		
+		if( $params ) foreach( $params as $param )
+		{
+			$item = explode( "=", $param );
+			
+			if( $item[ 0 ] == $name )
+				return trim( $item[ 1 ] );
+		}
 	}
 }
