@@ -8,9 +8,9 @@
 defined('_JEXEC') or die('Restricted access');
  
 // DAO base class (what is DAO? http://en.wikipedia.org/wiki/Data_access_object)
-JLoader::register( 'Entity', JPATH_BASE .'/libraries/entity.class.php' );
+JLoader::register( 'Entity', JPATH_BASE .'/includes/entity.class.php' );
  
-$dir = scandir( JPATH_BASE .'/libraries/entities/' );
+$dir = scandir( JPATH_BASE .'/includes/entities/' );
 
 if( $dir ) foreach( $dir as $file )
 {
@@ -18,6 +18,6 @@ if( $dir ) foreach( $dir as $file )
 	$fileparts = explode( '.', $file );
 	if( $fileparts[ 1 ] == 'class' && $fileparts[ 2 ] == 'php' )
 	{
-		JLoader::register( ucfirst( $fileparts[ 0 ] ), JPATH_BASE .'/entities/'. $file );
+		JLoader::register( ucfirst( $fileparts[ 0 ] ), JPATH_BASE .'/includes/'. $file );
 	}
 }
