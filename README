@@ -1,9 +1,8 @@
-1. Create directory {your_joomla_site}/libraries/dao
-	and put there:
-	- autoload.class.php 
+1. In {your_joomla_site}/libraries/ put: 
+	- autoload.php 
 	- entity.class.php
 
-2. Create {your_joomla_site}/libraries/dao/entities
+2. Create {your_joomla_site}/libraries/entities
 	and put all entities (dao objects) there
 
 
@@ -25,6 +24,6 @@ libraries/joomla/database/database/mysqli.php
 478: + while ($row = mysqli_fetch_object( $cur, $class )) {
 
 4. In every controller you want to use DAO add line:
-include_once( JPATH_BASE .'/libraries/dao/autoload.php' );
+include_once( JPATH_BASE .'/libraries/autoload.php' );
 
 Have a fun!
