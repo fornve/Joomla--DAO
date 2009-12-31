@@ -5,7 +5,7 @@
  * @author Marek Dajnowski (first release 20080614)
  * @documentation http://dajnowski.net/wiki/index.php5/Entity
  * @latest http://github.com/fornve/Joomla--DAO/blob/master/entity.class.php
- * @version 1.3 - Joomla adapter
+ * @version 1.3-1.5 - Joomla! 1.5 adapter
  * @License GPL v3
  */
 
