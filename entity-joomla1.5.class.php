@@ -111,7 +111,7 @@ class Entity
 
 		unset( $this->result ); // for object reuse
 		$this->db->setQuery( $query );
-		$this->db->Execute( $query ); 
+		//$this->db->Execute( $query ); 
 		$this->result = $this->db->loadObjectList( '', $class );
 		$this->db_query_counter++;
 
