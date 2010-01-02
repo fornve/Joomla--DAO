@@ -3,7 +3,6 @@ defined('_JEXEC') or die('Restricted access');
 
 class Content extends Entity
 {
-	protected $schema = array( 'id', 'title', 'alias', 'title_alias', 'introtext', 'fulltext', 'state', 'sectionid', 'mask', 'catid', 'created', 'created_by', 'created_by_alias', 'modified', 'modified_by', 'checked_out', 'checked_out_time   ', 'publish_up', 'publish_down', 'images', 'urls', 'attribs', 'version', 'parentid', 'ordering', 'metakey', 'metadesc', 'access', 'hits', 'metadata' );
 	protected $table_name = '#__content';
 
 	static function Retrieve( $id )

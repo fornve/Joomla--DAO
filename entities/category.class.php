@@ -3,8 +3,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class Category extends Entity
 {
-	protected $schema = array( 'id', 'name', 'alias', 'description', 'parent', 'extraFieldsGroup', 'published', 'access', 'ordering', 'image', 'params', 'trash', 'trash', 'plugins' );
-	protected $table_name = '#__k2_categories';
+	protected $table_name = '#__categories';
 
 	static function Retrieve( $category_id )
 	{
@@ -12,7 +11,7 @@ class Category extends Entity
 			return null;
 		
 		$entity = new Entity();
-		$query = "SELECT * FROM #__k2_categories WHERE id = ?";
+		$query = "SELECT * FROM #__categories WHERE id = ?";
 		$object = $entity->GetFirstResult( $query, $category_id, __CLASS__ );
 		
 		return $object;
@@ -24,7 +23,7 @@ class Category extends Entity
 			return null;
 		
 		$entity = new Entity();
-		$query = "SELECT id FROM #__k2_categories WHERE parent = ? ORDER BY ordering";
+		$query = "SELECT id FROM #__categories WHERE parent = ? ORDER BY ordering";
 		$objects = $entity->Collection( $query, $category_id, __CLASS__ );
 		
 		if( $objects ) foreach( $objects as $object )
@@ -41,7 +40,7 @@ class Category extends Entity
 	function GetKids()
 	{
 		$entity = new Entity();
-		$query = "SELECT * FROM #__k2_categories WHERE parent = ? ORDER BY ordering";
+		$query = "SELECT * FROM #__categories WHERE parent = ? ORDER BY ordering";
 		$objects = $entity->Collection( $query, $this->id, __CLASS__ );
 		
 		return $objects;

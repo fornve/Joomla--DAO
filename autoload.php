@@ -8,7 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
  
 // DAO base class (what is DAO? http://en.wikipedia.org/wiki/Data_access_object)
-JLoader::register( 'Entity', JPATH_BASE .'/includes/entity-joomla1.5.class.php' );
+JLoader::register( 'Entity', JPATH_BASE .'/includes/entity.class.php' );
  
 $dir = scandir( JPATH_BASE .'/includes/entities/' );
 

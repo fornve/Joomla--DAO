@@ -112,6 +112,7 @@ class Entity
 
 		unset( $this->result ); // for object reuse
 		$this->db->setQuery( $query );
+		//$this->db->Query( $query ); // causes duplication of query - not needed 
 		
 		$this->result = $this->loadObjectList( $class );
 		$this->db_query_counter++;
@@ -144,8 +145,10 @@ class Entity
 		{
 			$class = new $class;
 
-			if( $class->schema )
+			if( $class->GetSchema() )
+			{
 				$this->result = Entity::Stripslashes( $this->result, $class->schema );
+			}
 		}
 
 		if( isset( $this->result ) )
@@ -165,7 +168,7 @@ class Entity
 		{
 			$new_object = new $class;
 			
-			foreach( $new_object->schema as $field )
+			foreach( $new_object->GetSchema() as $field )
 			{
 				$new_object->$field = $object->$field;
 			}
@@ -178,7 +181,26 @@ class Entity
 		return $collection;
 	}
 
-
+	/*
+	 * Builds DAO schema
+	 */
+	function BuildSchema()
+	{
+		$query = "DESC {$this->table_name}";
+		$this->db->setQuery( $query );
+		$objects = $this->db->loadObjectList();
+		
+		if( $objects ) foreach( $objects as $object )
+		{
+			if( strlen( $object->Field ) > 0 )
+			{
+				$schema[] = $object->Field;
+			}
+		}
+		
+		$this->schema = $schema; 
+	}
+	
 	/**
 	 * Retrieve column group results
 	 * @param int $column
@@ -188,7 +210,7 @@ class Entity
 	function TypeCollection( $type )
 	{
 
-		if( !in_array( $type, $this->schema ) )
+		if( !in_array( $type, $this->GetSchema ) )
 			return false;
 
 		$table_name = strtolower( get_class( $this ) );
@@ -253,6 +275,7 @@ class Entity
 	function Save()
 	{
 		$table = $this->table_name;
+		$this->GetSchema(); // force to generate schema
 
 		$id = $this->schema[ 0 ];
 
@@ -294,6 +317,8 @@ class Entity
 	 */
 	function Create( $table, $id_value = null )
 	{
+		$this->GetSchema(); // force to generate schema
+		
 		$id = $this->schema[ 0 ];
 		$column = $this->schema[ 1 ];
 
@@ -355,7 +380,7 @@ class Entity
 	 */
 	public function SetProperties( $method = INPUT_POST )
 	{
-		$input = Common::Inputs( $this->schema, $method );
+		$input = Common::Inputs( $this->GetSchema(), $method );
 
 		foreach( $this->schema as $property )
 		{
@@ -369,12 +394,17 @@ class Entity
 	 */
 	public function GetSchema()
 	{
+		if( count( $this->schema ) < 1 )
+		{
+			$this->BuildSchema();
+		}
+		
 		return $this->schema;
 	}
 
 	public function InSchema( $key )
 	{
-		if( $this->schema ) foreach( $this->schema as $schema_key )
+		if( $this->GetSchema() ) foreach( $this->schema as $schema_key )
 		{
 			if( $key == $schema_key )
 				return true;
@@ -393,8 +423,10 @@ class Entity
 
 			foreach ( $array as $key => $value )
 			{
-				if( !is_numeric( $key ) )	
+				if( !is_numeric( $key ) )
+				{
 					$object->$key = $value;
+				}
 			}
 		}
 
@@ -502,7 +534,7 @@ class Entity
 	{
 		foreach( $schema as $key )
 		{
-			 $result[ 0 ]->$key = stripslashes( $result[ 0 ]->$key );
+			$result[ 0 ]->$key = stripslashes( $result[ 0 ]->$key );
 		}
 
 		return $result;
