@@ -236,7 +236,7 @@ class Entity
 		$object->BuildSchema();
 		
 		$entity = new Entity();
-		$query = "SELECT * FROM `{$object->table_name}` WHERE `{$this->id_name}` = ? LIMIT 1";
+		$query = "SELECT * FROM `{$object->table_name}` WHERE `{$object->id_name}` = ? LIMIT 1";
 		$object = $entity->GetFirstResult( $query, $id, $class );
 
 		if( !$object )

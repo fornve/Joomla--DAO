@@ -11,9 +11,14 @@
 	<description>Provides DAO layer</description>
 	<files>
 		<filename plugin="dao">dao.php</filename>
+		<filename plugin="dao">dao.xml</filename>
+		<filename plugin="dao">README</filename>
 		<filename plugin="dao">entities/entity.class.php</filename>
 		<filename plugin="dao">entities/asset.class.php</filename>
+		<filename plugin="dao">entities/category.class.php</filename>
 		<filename plugin="dao">entities/contact_details.class.php</filename>
+		<filename plugin="dao">entities/content.class.php</filename>
 		<filename plugin="dao">entities/user.class.php</filename>
+		<filename plugin="dao">entities/weblink.class.php</filename>
 	</files>
 </install>
