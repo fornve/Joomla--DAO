@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.6" type="plugin" group="system">
+	<name>System - Dao</name>
+	<author>Marek Dajnowski</author>
+	<creationDate>February 2007</creationDate>
+	<copyright>Copyright (C) 2007 - 2010 Marek Dajnowski.</copyright>
+	<license>GNU General Public License version 3</license>
+	<authorEmail>marek@dajnowski.net</authorEmail>
+	<authorUrl>www.sum-e.com</authorUrl>
+	<version>1.5</version>
+	<description>Provides DAO layer</description>
+	<files>
+		<filename plugin="dao">dao.php</filename>
+		<filename plugin="dao">entities/entity.class.php</filename>
+		<filename plugin="dao">entities/asset.class.php</filename>
+		<filename plugin="dao">entities/contact_details.class.php</filename>
+		<filename plugin="dao">entities/user.class.php</filename>
+	</files>
+</install>

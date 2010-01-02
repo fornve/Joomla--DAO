@@ -6,7 +6,7 @@
  * @author Marek Dajnowski (first release 20080614)
  * @documentation http://dajnowski.net/wiki/index.php5/Entity
  * @latest http://github.com/fornve/LiteEntityLib/tree/master/class/Entity.class.php
- * @version 1.4 - Joomla 1.5-1.6 adapter without changing core code
+ * @version 1.5-alfa - Joomla 1.5-1.6 adapter without changing core code
  * @License GPL v3
  */
 
@@ -19,6 +19,8 @@ class Entity
 	public $db_query_counter = 0;
 	protected static $__CLASS__ = __CLASS__;
 	protected $schema = array();
+	protected $table_name = null;
+	protected $id_name = 'id';
 
 	function __construct()
 	{
@@ -112,7 +114,6 @@ class Entity
 
 		unset( $this->result ); // for object reuse
 		$this->db->setQuery( $query );
-		//$this->db->Query( $query ); // causes duplication of query - not needed 
 		
 		$this->result = $this->loadObjectList( $class );
 		$this->db_query_counter++;
@@ -226,27 +227,23 @@ class Entity
 	 * @return object
 	 * Returns object type of entity
 	 */
-	/*
-	 * This method will work properly with php 6
-	static function Retrieve( $id, $id_name = 'id', $class = __CLASS__ )
+	static function Retrieve( $id, $class = __CLASS__ )
 	{
-		if( is_int( $id ) )
-		{
-			$object = new $class;
-			
-			$entity = new Entity();
-			$query = "SELECT * FROM `{$object->table_name}` WHERE `{$id}` = ? LIMIT 1";
-			$result = $entity->GetFirstResult( $query, $id, $class );
+		if( !$id )
+			return null;
 
-			if( $result ) foreach( $result as $key => $value )
-			{
-				$object->$key = $value;
-			}
-
-			return $object;
-		}
+		$object = new $class;
+		$object->BuildSchema();
 		
-	}*/
+		$entity = new Entity();
+		$query = "SELECT * FROM `{$object->table_name}` WHERE `{$this->id_name}` = ? LIMIT 1";
+		$object = $entity->GetFirstResult( $query, $id, $class );
+
+		if( !$object )
+			return null;
+
+		return $object;
+	}
 
 	/**
 	 *
@@ -277,8 +274,6 @@ class Entity
 		$table = $this->table_name;
 		$this->GetSchema(); // force to generate schema
 
-		$id = $this->schema[ 0 ];
-
 		if( !$this->$id )
 			$this->$id = $this->Create( $table );
 
@@ -302,7 +297,8 @@ class Entity
 			}
 		}
 
-		$query .= " WHERE {$this->schema[0]} = ?";
+		$query .= " WHERE {$this->id_name} = ?";
+		
 		$arguments[] = $this->{$id};
 
 		$this->Query( $query, $arguments );
@@ -318,18 +314,17 @@ class Entity
 	function Create( $table, $id_value = null )
 	{
 		$this->GetSchema(); // force to generate schema
-		
-		$id = $this->schema[ 0 ];
+
 		$column = $this->schema[ 1 ];
 
 		if( $id_value )
-			$query = "INSERT INTO `{$table}` ( `{$id}`, `{$column}` ) VALUES ( {$id_value}, 0 )";
+			$query = "INSERT INTO `{$this->table_name}` ( `{$this->id_name}`, `{$column}` ) VALUES ( {$id_value}, 0 )";
 		else
-			$query = "INSERT INTO `{$table}` ( `{$column}` ) VALUES ( 0 )";
+			$query = "INSERT INTO `{$this->table_name}` ( `{$column}` ) VALUES ( 0 )";
 
 
 		$this->Query( $query );
-		$result = $this->GetFirstResult( "SELECT {$id} FROM `{$table}` WHERE `{$column}` = 0 ORDER BY `{$id}` DESC LIMIT 1" );
+		$result = $this->GetFirstResult( "SELECT {$this->id_name} FROM `{$this->table_name}` WHERE `{$column}` = 0 ORDER BY `{$this->id_name}` DESC LIMIT 1" );
 		return $result->$id;
 	}
 
@@ -354,8 +349,8 @@ class Entity
 	function Delete()
 	{
 		$this->PreDelete();
-		$table = strtolower( get_class( $this ) );
-		$query = "DELETE FROM `{$table}` WHERE id = ?";
+
+		$query = "DELETE FROM `{$this->table_name}` WHERE {$this->id_name} = ?";
 		$this->query( $query, $this->id );
 	}
 
@@ -368,8 +363,8 @@ class Entity
 		if( !$class )
 			die( "Entity::GetAll - class name cannot be null." );
 
-		$table = strtolower( $class );
-		$query = "SELECT * from `{$table}`";
+		$object = new $class;
+		$query = "SELECT * from `{$object->table_name}`";
 		$entity = new Entity();
 		return $entity->Collection( $query, null, $class );
 	}
@@ -561,6 +556,26 @@ class Entity
 		{
 			var_dump( $this->error, $this->query );
 		}
+	}
+	
+	/*
+	 * Get additional params
+	 * @param	string	Name of parameter
+	 * @return	string	Parameter value
+	 */
+	public function GetParam( $name = null )
+	{
+		if( !$name )
+			return null;
+			
+		$params = explode( "\n", $this->params );
 		
+		if( $params ) foreach( $params as $param )
+		{
+			$item = explode( "=", $param );
+			
+			if( $item[ 0 ] == $name )
+				return trim( $item[ 1 ] );
+		}
 	}
 }
