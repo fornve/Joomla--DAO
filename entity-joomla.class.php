@@ -6,7 +6,7 @@
  * @author Marek Dajnowski (first release 20080614)
  * @documentation http://dajnowski.net/wiki/index.php5/Entity
  * @latest http://github.com/fornve/LiteEntityLib/tree/master/class/Entity.class.php
- * @version 1.3-1.6 - Joomla 1.6 adapter
+ * @version 1.4 - Joomla 1.5-1.6 adapter without changing core code
  * @License GPL v3
  */
 
@@ -112,8 +112,8 @@ class Entity
 
 		unset( $this->result ); // for object reuse
 		$this->db->setQuery( $query );
-		//$this->db->Query( $query ); 
-		$this->result = $this->db->loadObjectList( '', $class );
+		
+		$this->result = $this->loadObjectList( $class );
 		$this->db_query_counter++;
 
 		/*
@@ -152,6 +152,33 @@ class Entity
 			return $this->result;
 	}
 
+	/*
+	 * This function is a fudge to avoid changing Joomla! core code in libraries/joomla/database.
+	 * @param	string	name of class to bind to object
+	 * @return 	array	array of objects
+	 */
+	function loadObjectList( $class )
+	{
+		$object_list = $this->db->loadObjectList();
+		
+		if( $object_list ) foreach( $object_list as & $object )
+		{
+			$new_object = new $class;
+			
+			foreach( $new_object->schema as $field )
+			{
+				$new_object->$field = $object->$field;
+			}
+			
+			$object = null;
+			
+			$collection[] = $new_object;
+		}
+	
+		return $collection;
+	}
+
+
 	/**
 	 * Retrieve column group results
 	 * @param int $column
@@ -177,14 +204,16 @@ class Entity
 	 * @return object
 	 * Returns object type of entity
 	 */
+	/*
+	 * This method will work properly with php 6
 	static function Retrieve( $id, $id_name = 'id', $class = __CLASS__ )
 	{
 		if( is_int( $id ) )
 		{
 			$object = new $class;
-			$table = strtolower( $class );
+			
 			$entity = new Entity();
-			$query = "SELECT * FROM `{$table}` WHERE `{$id}` = ? LIMIT 1";
+			$query = "SELECT * FROM `{$object->table_name}` WHERE `{$id}` = ? LIMIT 1";
 			$result = $entity->GetFirstResult( $query, $id, $class );
 
 			if( $result ) foreach( $result as $key => $value )
@@ -195,7 +224,7 @@ class Entity
 			return $object;
 		}
 		
-	}
+	}*/
 
 	/**
 	 *
