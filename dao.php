@@ -7,16 +7,31 @@ class plgSystemDao extends JPlugin
 {
 	function onAfterInitialise()
 	{
-		$dir = scandir( JPATH_BASE .'/plugins/system/dao/entities/' );
-
-		if( $dir ) foreach( $dir as $file )
+		// load common entities
+		
+		$dir_path = JPATH_BASE . DS .'plugins'. DS .'system'. DS .'dao'. DS .'entities'. DS;
+		self::AutoloadDirectory( $dir_path );
+		
+		// load admin entities
+		$dir_path = JPATH_SITE . DS .'plugins'. DS .'system'. DS .'dao'. DS .'entities'. DS;
+		self::AutoloadDirectory( $dir_path );
+	}
+	
+	private static function AutoloadDirectory( $dir_path )
+	{
+		if( !file_exists( $dir_path ) )
+			return false;
+		
+		$dir = scandir( $dir_path );
+		
+		foreach( $dir as $file )
 		{
 			$filename = basename( $file );
 			$fileparts = explode( '.', $file );
 	
 			if( $fileparts[ 1 ] == 'class' && $fileparts[ 2 ] == 'php' )
 			{
-				JLoader::register( ucfirst( $fileparts[ 0 ] ), JPATH_BASE .'/plugins/system/dao/entities/'. $file );
+				JLoader::register( ucfirst( $fileparts[ 0 ] ), $dir_path . $file );
 			}
 		}
 	}
