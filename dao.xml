@@ -15,10 +15,33 @@
 		<filename plugin="dao">README</filename>
 		<filename plugin="dao">entities/entity.class.php</filename>
 		<filename plugin="dao">entities/asset.class.php</filename>
+		<filename plugin="dao">entities/banner.class.php</filename>
+		<filename plugin="dao">entities/banner_client.class.php</filename>
+		<filename plugin="dao">entities/banner_track.class.php</filename>
 		<filename plugin="dao">entities/category.class.php</filename>
-		<filename plugin="dao">entities/contact_details.class.php</filename>
 		<filename plugin="dao">entities/content.class.php</filename>
+		<filename plugin="dao">entities/content_frontpage.class.php</filename>
+		<filename plugin="dao">entities/content_rating.class.php</filename>
+		<filename plugin="dao">entities/contact_details.class.php</filename>
+		<filename plugin="dao">entities/extension.class.php</filename>
+		<filename plugin="dao">entities/language.class.php</filename>
+		<filename plugin="dao">entities/menu.class.php</filename>
+		<filename plugin="dao">entities/menu_template.class.php</filename>
+		<filename plugin="dao">entities/menu_type.class.php</filename>
+		<filename plugin="dao">entities/message.class.php</filename>
+		<filename plugin="dao">entities/message_cfg.class.php</filename>
+		<filename plugin="dao">entities/module.class.php</filename>
+		<filename plugin="dao">entities/module_menu.class.php</filename>
+		<filename plugin="dao">entities/newsfeeds.class.php</filename>
+		<filename plugin="dao">entities/redirect_links.class.php</filename>
+		<filename plugin="dao">entities/schema.class.php</filename>
+		<filename plugin="dao">entities/session.class.php</filename>
+		<filename plugin="dao">entities/update.class.php</filename>
+		<filename plugin="dao">entities/update_category.class.php</filename>
+		<filename plugin="dao">entities/update_sites_extension.class.php</filename>
 		<filename plugin="dao">entities/user.class.php</filename>
+		<filename plugin="dao">entities/user_group.class.php</filename>
+		<filename plugin="dao">entities/user_profile.class.php</filename>
 		<filename plugin="dao">entities/weblink.class.php</filename>
 	</files>
 </install>
