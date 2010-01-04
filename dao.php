@@ -17,6 +17,11 @@ class plgSystemDao extends JPlugin
 		self::AutoloadDirectory( $dir_path );
 	}
 	
+	public static function addClassPath( $dir_path )
+	{
+		self::AutoloadDirectory( $dir_path );
+	}
+	
 	private static function AutoloadDirectory( $dir_path )
 	{
 		if( !file_exists( $dir_path ) )
