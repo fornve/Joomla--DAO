@@ -121,13 +121,14 @@ class Entity
 
 			$arguments[] = $limit;
 		}
-		
+	
 		$query = $this->Arguments( $query, $arguments );
 
 		unset( $this->result ); // for object reuse
 		$this->db->setQuery( $query );
-		
+
 		$this->result = $this->loadObjectList( $class );
+		
 		$this->db_query_counter++;
 
 		/*
@@ -180,8 +181,8 @@ class Entity
 		if( $object_list ) foreach( $object_list as & $object )
 		{
 			$new_object = new $class;
-			
-			foreach( $new_object->GetSchema() as $field )
+
+			foreach( $new_object->BuildSchema() as $field )
 			{
 				$new_object->$field = $object->$field;
 			}
@@ -211,7 +212,7 @@ class Entity
 			}
 		}
 		
-		$this->schema = $schema; 
+		return $this->schema = $schema;
 	}
 	
 	/**
@@ -228,7 +229,7 @@ class Entity
 
 		$table_name = strtolower( get_class( $this ) );
 		$query = "SELECT {$type} FROM {$table_name} GROUP BY {$type}";
-		return $this->Collection( $query, null, 'stdClass' );
+		return $this->Collection( $query, null, 'Entity' );
 	}
 
 	/**
@@ -284,6 +285,7 @@ class Entity
 	function Save()
 	{
 		$table = $this->table_name;
+		$id = $this->id_name;
 		$this->GetSchema(); // force to generate schema
 
 		if( !$this->$id )
@@ -326,17 +328,21 @@ class Entity
 	function Create( $table, $id_value = null )
 	{
 		$this->GetSchema(); // force to generate schema
+		$id = $this->id_name;
 
 		$column = $this->schema[ 1 ];
-
+		
 		if( $id_value )
 			$query = "INSERT INTO `{$this->table_name}` ( `{$this->id_name}`, `{$column}` ) VALUES ( {$id_value}, 0 )";
 		else
 			$query = "INSERT INTO `{$this->table_name}` ( `{$column}` ) VALUES ( 0 )";
 
-
 		$this->Query( $query );
-		$result = $this->GetFirstResult( "SELECT {$this->id_name} FROM `{$this->table_name}` WHERE `{$column}` = 0 ORDER BY `{$this->id_name}` DESC LIMIT 1" );
+		
+		$query = "SELECT {$id} FROM `{$this->table_name}` WHERE `{$column}` = 0 ORDER BY `{$this->id_name}` DESC LIMIT 1";
+		
+		$result = $this->GetFirstResult( $query, null, get_class( $this ) );
+
 		return $result->$id;
 	}
 
