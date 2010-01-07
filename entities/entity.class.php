@@ -18,8 +18,20 @@ class Entity
 	protected $multi_query = false;
 	public $db_query_counter = 0;
 	protected static $__CLASS__ = __CLASS__;
+	
+	/*
+	 * Schema is being build as list of table columns. It can be specified staticly in entity extension class
+	 */
 	protected $schema = array();
+	
+	/*
+	 * In entity extension class is necesary to specify table name which is to be used.
+	 */
 	protected $table_name = null;
+	
+	/*
+	 * Column name to be used as ID. If not speciefied 'id' is used as default.
+	 */
 	protected $id_name = 'id';
 
 	function __construct()

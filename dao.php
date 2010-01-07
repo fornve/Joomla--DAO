@@ -8,8 +8,17 @@ class plgSystemDao extends JPlugin
 	function onAfterInitialise()
 	{
 		// load common entities
-		
+
+		// Joomla 1.5	
+		$dir_path = JPATH_BASE . DS .'plugins'. DS .'system'. DS .'entities'. DS;
+		self::AutoloadDirectory( $dir_path );
+
+		// Joomla 1.6
 		$dir_path = JPATH_BASE . DS .'plugins'. DS .'system'. DS .'dao'. DS .'entities'. DS;
+		self::AutoloadDirectory( $dir_path );
+			
+		// load admin entities
+		$dir_path = JPATH_SITE . DS .'plugins'. DS .'system'. DS .'entities'. DS;
 		self::AutoloadDirectory( $dir_path );
 		
 		// load admin entities
@@ -28,7 +37,7 @@ class plgSystemDao extends JPlugin
 			return false;
 		
 		$dir = scandir( $dir_path );
-		
+
 		foreach( $dir as $file )
 		{
 			$filename = basename( $file );
