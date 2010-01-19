@@ -182,7 +182,9 @@ class Entity
 		{
 			$new_object = new $class;
 
-			foreach( $new_object->BuildSchema() as $field )
+			$schema = $new_object->BuildSchema();
+
+			if( $schema ) foreach( $schema as $field )
 			{
 				$new_object->$field = $object->$field;
 			}
