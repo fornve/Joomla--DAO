@@ -70,12 +70,14 @@ class Entity
 	 * @param string $query
 	 * @param mixed $arguments
 	 */
-	function Query( $query, $arguments = null )
+	public function query( $query, $arguments = null )
 	{
-		if( DB_TABLE_PREFIX )
-			$query = $this->Prefix( $query );
+		if( defined( 'DB_TABLE_PREFIX' ) && DB_TABLE_PREFIX )
+		{
+			$query = $this->prefix( $query );
+		}
 
-		$query = $this->Arguments( $query, $arguments );
+		$query = $this->arguments( $query, $arguments );
 
 		$this->db_query_counter++;
 		$this->db->setQuery( $query );
@@ -298,8 +300,9 @@ class Entity
 			return $false;
 	}
 
-	function Save()
+	public function save()
 	{
+		$notfirst = false;
 		$table = $this->table_name;
 		$id = $this->id_name;
 		$this->GetSchema(); // force to generate schema

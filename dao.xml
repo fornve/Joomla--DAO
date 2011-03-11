@@ -3,12 +3,12 @@
 	<name>System - Dao</name>
 	<author>Marek Dajnowski</author>
 	<creationDate>January 2010</creationDate>
-	<copyright>Copyright (C) 2007 - 2010 Marek Dajnowski.</copyright>
+	<copyright>Copyright (C) 2007 - 2011 Marek Dajnowski.</copyright>
 	<license>GNU General Public License version 3</license>
 	<authorEmail>marek@dajnowski.net</authorEmail>
 	<authorUrl>http://sum-e.com/Page/View/2/Joomla DAO</authorUrl>
-	<version>1.0.0</version>
-	<description>Provides DAO layer</description>
+	<version>1.0.2</version>
+	<description>Provides DAO layer. Allows to keep code cleaner and improves development performance without loos of application performance.</description>
 	<files>
 		<filename plugin="dao">dao.php</filename>
 		<filename plugin="dao">README</filename>
